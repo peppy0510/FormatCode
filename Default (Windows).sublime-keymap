@@ -1,0 +1,8 @@
+[
+    {
+        "keys": [
+            "ctrl+'"
+        ],
+        "command": "format_code"
+    }
+]
