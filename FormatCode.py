@@ -14,10 +14,8 @@ reference:
 '''
 
 
-import sublime  # noqa
-import sublime_plugin
-
 import os
+import sublime_plugin
 
 
 SYNTAX_DICTIONARY = {
@@ -31,6 +29,7 @@ SYNTAX_DICTIONARY = {
     'python': ['Python', 'Python3', 'Python Django', 'MagicPython'],
     'html': ['HTML', 'HTML (Django)', 'HTML-extended', 'XML',
              'NgxHTML', 'naomi.html5', 'HTML (Underscore)'],
+    'pip': ['requirements.txt'],
 }
 
 
@@ -59,7 +58,8 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         syntax = self.view.settings().get('syntax')
         syntax = os.path.splitext(os.path.split(syntax)[-1])[0]
-        extension = os.path.splitext(self.view.file_name())[-1].strip('.')
+        filename = os.path.basename(self.view.file_name())
+        extension = os.path.splitext(filename)[-1].strip('.')
 
         print("{}({{'syntax': '{}', 'extension': '{}'}})".format(
             self.__class__.__name__[:-7], syntax, extension))
@@ -110,5 +110,9 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         if syntax in syntaxmap('markdown') or extension in ('md',):
             self.view.run_command('markdown_table_format')
+
+        if (syntax in syntaxmap('requirements.txt') or
+                extension in ('pip',) or filename == 'requirements.txt'):
+            self.view.run_command('python_fix_requirements')
 
         self.view.set_viewport_position(viewport_position)
