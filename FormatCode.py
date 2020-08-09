@@ -111,8 +111,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
         if syntax in syntaxmap('markdown') or extension in ('md',):
             self.view.run_command('markdown_table_format')
 
-        if (syntax in syntaxmap('requirements.txt') or
-                extension in ('pip',) or filename == 'requirements.txt'):
+        if syntax in syntaxmap('requirements.txt') or extension in ('pip', 'apt',):
             self.view.run_command('python_fix_requirements')
 
         self.view.set_viewport_position(viewport_position)
