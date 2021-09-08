@@ -45,6 +45,8 @@ SYNTAX_DICTIONARY = {
     ],
     'pip': ['requirements.txt'],
     'lua': ['Lua'],
+    'shell': ['Shell-Unix-Generic'],
+    # 'shell': ['PowershellSyntax', 'Shell-Unix-Generic'],
 }
 
 
@@ -143,5 +145,11 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         if syntax in syntaxmap('pip') or extension in ('pip', 'apt'):
             self.view.run_command('python_fix_requirements')
+
+        if syntax in syntaxmap('lua') or extension in ('lua',):
+            self.view.run_command('lua_format')
+
+        if syntax in syntaxmap('shell') or extension in ('sh', 'bash'):
+            self.view.run_command('pretty_shell')
 
         self.view.set_viewport_position(viewport_position)
