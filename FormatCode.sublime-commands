@@ -1,6 +1,13 @@
 [
-    { 
+    {
         "caption": "Format Code",
         "command": "format_code"
+    },
+    {
+        "caption": "Format Code: Source Code",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/FormatCode/FormatCode.py"
+        }
     }
 ]

@@ -86,9 +86,11 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
             'c', 'java', 'json', 'html', 'css', 'python', 'javascript', 'typescript'
         ):
             self.view.run_command('unexpand_tabs')
-            self.view.run_command('set_setting', {'setting': 'tab_size', 'value': 4})
+            self.view.run_command(
+                'set_setting', {'setting': 'tab_size', 'value': 4})
             self.view.run_command('expand_tabs', {'set_translate_tabs': True})
-            self.view.run_command('expand_tabs', {'translate_tabs_to_spaces': True})
+            self.view.run_command(
+                'expand_tabs', {'translate_tabs_to_spaces': True})
             # self.view.run_command('re_indent_to_four')
             # self.view.run_command('indentation_convert_to_spaces')
             # "detect_indentation": true,
@@ -117,16 +119,17 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
             self.view.run_command('htmlprettify')
 
         if syntax in syntaxmap('javacript') or extension in ('js', 'jsx'):
-            # self.view.run_command('sort_js_imports')
             self.view.run_command('javascript_fix_imports')
             self.view.run_command('js_prettier')
+            # self.view.run_command('sort_js_imports')
 
         if syntax in syntaxmap('css') or extension in ('css', 'scss', 'sass'):
             self.view.run_command('css_comb')
 
         if syntax in syntaxmap('python') or extension in ('py', 'pyw'):
             self.view.run_command('python_fiximports')
-            self.view.run_command('black')
+            self.view.run_command('auto_pep8', {'preview': False})
+            # self.view.run_command('black')
             # self.view.run_command('auto_pep8')
             # self.view.run_command('pep8_autoformat')
 
@@ -142,6 +145,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         if syntax in syntaxmap('markdown') or extension in ('md',):
             self.view.run_command('markdown_table_format')
+            # self.view.run_command('js_prettier')
 
         if syntax in syntaxmap('pip') or extension in ('pip', 'apt'):
             self.view.run_command('python_fix_requirements')
