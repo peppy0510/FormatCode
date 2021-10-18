@@ -72,35 +72,3 @@ class JSXTagComment:
             self.uncomment()
         else:
             self.comment()
-
-        # region = self.view.sel()[0]
-        # if region.b == region.a:
-        #     region = self.view.line(region.a)
-        #     selected_string = self.view.substr(region)
-        # else:
-        #     selected_string = self.view.substr(region)
-
-        # pattern = r'^([\s\t\r\n]{0,})\{\/\*[\s\t]{0,}(\<[\W\w]{0,}\>)[\s\t]{0,}\*\/\}([\s\t\r\n]{0,})$'
-        # if re.match(pattern, selected_string):
-        #     selected_string = re.sub(
-        #         pattern,
-        #         r'\g<1>\g<2>\g<3>',
-        #         selected_string
-        #     )
-        #     print(selected_string)
-        #     self.view.replace(edit, region, selected_string)
-
-        # else:
-        #     pattern = r'^([\s\t\r\n]{0,})(\<[\W\w]{0,}\>)([\s\t\r\n]{0,})$'
-        #     if re.match(pattern, selected_string):
-        #         selected_string = re.sub(
-        #             pattern,
-        #             r'\g<1>{/* \g<2> */}\g<3>',
-        #             selected_string
-        #         )
-        #         print(selected_string)
-        #         # self.view.sel().clear()
-        #         # self.view.sel().add(sublime.Region(**kwargs['region']))
-        #         self.view.replace(edit, region, selected_string)
-        #         # self.view.replace(edit, sublime.Region(a=region.a), selected_string)
-        # # uncommented_m = re.match(uncomented_pattern, selected_string)
