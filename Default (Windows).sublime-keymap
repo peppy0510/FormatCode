@@ -1,8 +1,11 @@
 [
     {
-        "keys": [
-            "ctrl+'"
-        ],
+        "keys": ["ctrl+'"],
         "command": "format_code"
+    },
+    {
+        "keys": ["ctrl+/"],
+        "command": "format_code",
+        "args": { "comment": true }
     }
 ]

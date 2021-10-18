@@ -17,6 +17,7 @@ reference:
 import os
 import sublime_plugin
 
+from .JSXTagComment import JSXTagComment
 
 SYNTAX_DICTIONARY = {
     'java': ['Java'],
@@ -67,8 +68,9 @@ syntaxmap = Syntax().syntaxmap
 
 
 class FormatCodeCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, edit, comment=False):
 
+        plugin_name = self.__class__.__name__[:-7]
         viewport_position = self.view.viewport_position()
 
         syntax = self.view.settings().get('syntax')
@@ -76,9 +78,20 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
         filename = os.path.basename(self.view.file_name())
         extension = os.path.splitext(filename)[-1].strip('.')
 
+        if comment:
+            if syntax in syntaxmap('javacript') or extension in ('js', 'jsx'):
+                jsxtagcomment = JSXTagComment(edit, self.view)
+                if jsxtagcomment.is_jsxtag:
+                    jsxtagcomment.toggle()
+                    print('{}.Comment().JSXTagComment()'.format(plugin_name))
+                    return
+            print('{}.Comment()'.format(plugin_name))
+            self.view.run_command('toggle_comment')
+            return
+
         print(
             "{}({{'syntax': '{}', 'extension': '{}'}})".format(
-                self.__class__.__name__[:-7], syntax, extension
+                plugin_name, syntax, extension
             )
         )
 
