@@ -15,9 +15,12 @@ reference:
 
 
 import os
+import re
+import sublime
 import sublime_plugin
 
 from .JSXTagComment import JSXTagComment
+from .SingleLineComment import SingleLineComment
 
 SYNTAX_DICTIONARY = {
     'java': ['Java'],
@@ -79,12 +82,21 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
         extension = os.path.splitext(filename)[-1].strip('.')
 
         if comment:
+            if extension in ('reg', 'pip', 'apt', 'bat', 'cmd',) or \
+                    syntax in ('REG', 'Batch File',):
+                singlelinecomment = SingleLineComment(
+                    edit, self.view, syntax, extension)
+                singlelinecomment.toggle()
+                print('{}.Comment().SingleLineComment()'.format(plugin_name))
+                return
+
             if syntax in syntaxmap('javacript') or extension in ('js', 'jsx'):
                 jsxtagcomment = JSXTagComment(edit, self.view)
                 if jsxtagcomment.is_jsxtag:
                     jsxtagcomment.toggle()
                     print('{}.Comment().JSXTagComment()'.format(plugin_name))
                     return
+
             print('{}.Comment()'.format(plugin_name))
             self.view.run_command('toggle_comment')
             return
