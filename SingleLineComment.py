@@ -75,10 +75,16 @@ class SingleLineComment:
 
     def toggle(self):
         lines = self.selected_string.split('\n')
+        is_commented = True
         for i in range(len(lines)):
-            if self.is_commented(lines[i]):
+            if lines[i] and not self.is_commented(lines[i]):
+                is_commented = False
+
+        if is_commented:
+            for i in range(len(lines)):
                 lines[i] = self.uncomment(lines[i])
-            else:
+        else:
+            for i in range(len(lines)):
                 lines[i] = self.comment(lines[i])
 
         sub_string = '\n'.join(lines)
