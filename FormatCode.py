@@ -81,7 +81,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         if comment:
             if extension in ('reg', 'pip', 'apt', 'bat', 'cmd',) or \
-                    syntax in ('REG', 'Batch File',):
+                    syntax in ('REG', 'Batch File', 'EditorConfig'):
                 singlelinecomment = SingleLineComment(
                     edit, self.view, syntax, extension)
                 singlelinecomment.toggle()
