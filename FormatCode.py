@@ -25,7 +25,7 @@ SYNTAX_DICTIONARY = {
     'c': ['C', 'C++', 'C#'],
     'typescript': ['TypeScript', 'TypeScriptReact'],
     'css': ['CSS', 'CSS (Django)', 'SCSS', 'naomi.css3'],
-    'json': ['JSON', 'JSON (Sublime)', 'JSON Key-Value'],
+    'json': ['JSON', 'JSON (Sublime)', 'JSON Key-Value', 'Sublime Text Project'],
     'markdown': ['Markdown', 'Markdown GFM', 'MultiMarkdown'],
     'javacript': [
         'JSX',
@@ -125,6 +125,8 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         if syntax in syntaxmap('json') or extension in (
             'json',
+            'sublime-project',
+            'sublime-workspace',
             'sublime-settings',
             'sublime-commands',
             'sublime-keymap',
