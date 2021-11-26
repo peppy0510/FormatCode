@@ -27,7 +27,7 @@ SYNTAX_DICTIONARY = {
     'css': ['CSS', 'CSS (Django)', 'SCSS', 'naomi.css3'],
     'json': ['JSON', 'JSON (Sublime)', 'JSON Key-Value', 'Sublime Text Project'],
     'markdown': ['Markdown', 'Markdown GFM', 'MultiMarkdown'],
-    'javacript': [
+    'javascript': [
         'JSX',
         'TSX',
         'JavaScript',
@@ -88,7 +88,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
                 print('{}.Comment().SingleLineComment()'.format(plugin_name))
                 return
 
-            if syntax in syntaxmap('javacript') or extension in ('js', 'jsx'):
+            if syntax in syntaxmap('javascript') or extension in ('js', 'jsx'):
                 jsxtagcomment = JSXTagComment(edit, self.view)
                 if jsxtagcomment.is_jsxtag:
                     jsxtagcomment.toggle()
@@ -109,11 +109,10 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
             'c', 'java', 'json', 'html', 'css', 'python', 'javascript', 'typescript'
         ):
             self.view.run_command('unexpand_tabs')
-            self.view.run_command(
-                'set_setting', {'setting': 'tab_size', 'value': 4})
+            self.view.run_command('set_setting', {'setting': 'tab_size', 'value': 4})
             self.view.run_command('expand_tabs', {'set_translate_tabs': True})
-            self.view.run_command(
-                'expand_tabs', {'translate_tabs_to_spaces': True})
+            self.view.run_command('expand_tabs', {'translate_tabs_to_spaces': True})
+
             # self.view.run_command('re_indent_to_four')
             # self.view.run_command('indentation_convert_to_spaces')
             # "detect_indentation": true,
@@ -143,7 +142,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
         if syntax in syntaxmap('html') or extension in ('htm', 'html'):
             self.view.run_command('htmlprettify')
 
-        if syntax in syntaxmap('javacript') or extension in ('js', 'jsx'):
+        if syntax in syntaxmap('javascript') or extension in ('js', 'jsx'):
             self.view.run_command('javascript_fix_imports')
             self.view.run_command('js_prettier')
             # self.view.run_command('sort_js_imports')
