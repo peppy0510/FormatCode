@@ -14,15 +14,23 @@ reference:
 '''
 
 
+import html
+import json
 import os
+import platform
+import sublime
 import sublime_plugin
+import subprocess
 
 from .JSXTagComment import JSXTagComment
 from .SingleLineComment import SingleLineComment
+from pathlib import Path
+
 
 SYNTAX_DICTIONARY = {
     'java': ['Java'],
     'c': ['C', 'C++', 'C#'],
+    'dart': ['Dart'],
     'typescript': ['TypeScript', 'TypeScriptReact'],
     'css': ['CSS', 'CSS (Django)', 'SCSS', 'naomi.css3'],
     'json': ['JSON', 'JSON (Sublime)', 'JSON Key-Value', 'Sublime Text Project'],
@@ -88,7 +96,8 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
                 print('{}.Comment().SingleLineComment()'.format(plugin_name))
                 return
 
-            if syntax in syntaxmap('javascript') or extension in ('js', 'jsx'):
+            if (syntax in syntaxmap('javascript') or extension in ('js', 'jsx') or
+                    syntax in syntaxmap('typescript') or extension in ('ts', 'tsx')):
                 jsxtagcomment = JSXTagComment(edit, self.view)
                 if jsxtagcomment.is_jsxtag:
                     jsxtagcomment.toggle()
@@ -157,9 +166,11 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
             # self.view.run_command('auto_pep8')
             # self.view.run_command('pep8_autoformat')
 
-        if syntax in syntaxmap('typescript') or extension in ('ts',):
-            self.view.run_command('typescript_format_document')
-            self.view.run_command('typescript_organize_imports')
+        if syntax in syntaxmap('typescript') or extension in ('ts', 'tsx'):
+            # self.view.run_command('javascript_fix_imports')
+            self.view.run_command('js_prettier')
+            # self.view.run_command('typescript_format_document')
+            # self.view.run_command('typescript_organize_imports')
 
         if syntax in syntaxmap('lua') or extension in ('lua',):
             self.view.run_command('lua_format')
@@ -179,5 +190,37 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
         if syntax in syntaxmap('shell') or extension in ('sh', 'bash'):
             self.view.run_command('pretty_shell')
+
+        if syntax in syntaxmap('dart') or extension in ('dart'):
+            line_length = 100
+            region = sublime.Region(a=0, b=10 ** 16)
+
+            pipe = subprocess.PIPE
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+            dart_path = None
+            for path in os.environ.get('PATH').split(';'):
+                if 'flutter' in Path(path).parts:
+                    dart_path = str(Path(path)) + str(Path('/cache/dart-sdk/bin/dart'))
+                    if platform.system() == 'Windows':
+                        dart_path += '.exe'
+
+            if dart_path:
+                # --fix --indent --selection --summary --line-length
+                # self.view.file_name(),
+                proc = subprocess.Popen([
+                    dart_path, 'format',
+                    '--output', 'json',
+                    '--indent', str(0),
+                    '--line-length', str(line_length),
+                ], stdin=pipe, stdout=pipe, stderr=pipe, startupinfo=startupinfo)
+                resp, error = proc.communicate(self.view.substr(region).encode('utf-8'))
+
+                if not error and resp:
+                    source = json.loads(resp.decode('utf-8')).get('source')
+                    self.view.replace(edit, region, source)
+                else:
+                    print(error.decode('utf-8'))
 
         self.view.set_viewport_position(viewport_position)
