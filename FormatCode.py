@@ -208,7 +208,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
                         dart_path += '.exe'
 
             if dart_path:
-                print(dart_path)
+                # print(dart_path)
                 # --fix --indent --selection --summary --line-length
                 # self.view.file_name(),
                 proc = subprocess.Popen([
@@ -221,7 +221,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
                 if not error and resp:
                     source = json.loads(resp.decode('utf-8')).get('source')
-                    print(source)
+                    # print(source)
                     self.view.replace(edit, region, source)
                 else:
                     print(error.decode('utf-8'))
