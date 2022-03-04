@@ -201,12 +201,14 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
             dart_path = None
             for path in os.environ.get('PATH').split(';'):
-                if 'flutter' in Path(path).parts:
+                parts = Path(path).parts
+                if 'flutter' in parts and 'dart-sdk' not in parts:
                     dart_path = str(Path(path)) + str(Path('/cache/dart-sdk/bin/dart'))
                     if platform.system() == 'Windows':
                         dart_path += '.exe'
 
             if dart_path:
+                print(dart_path)
                 # --fix --indent --selection --summary --line-length
                 # self.view.file_name(),
                 proc = subprocess.Popen([
@@ -219,6 +221,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
                 if not error and resp:
                     source = json.loads(resp.decode('utf-8')).get('source')
+                    print(source)
                     self.view.replace(edit, region, source)
                 else:
                     print(error.decode('utf-8'))
