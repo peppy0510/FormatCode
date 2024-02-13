@@ -24,7 +24,7 @@ import subprocess
 
 from .JSXTagComment import JSXTagComment
 from .SingleLineComment import SingleLineComment
-from pathlib import Path
+# from pathlib import Path
 
 
 SYNTAX_DICTIONARY = {
@@ -151,7 +151,8 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
         if syntax in syntaxmap('html') or extension in ('htm', 'html'):
             self.view.run_command('htmlprettify')
 
-        if syntax in syntaxmap('javascript') or extension in ('js', 'jsx'):
+        if (syntax in syntaxmap('javascript') or extension in ('js', 'jsx') or
+                syntax in syntaxmap('typescript') or extension in ('ts', 'tsx')):
             self.view.run_command('javascript_fix_imports')
             self.view.run_command('js_prettier')
             # self.view.run_command('sort_js_imports')
@@ -192,7 +193,7 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
             self.view.run_command('pretty_shell')
 
         if syntax in syntaxmap('dart') or extension in ('dart'):
-            line_length = 100
+            line_length = 80
             region = sublime.Region(a=0, b=10 ** 16)
 
             pipe = subprocess.PIPE
@@ -201,10 +202,16 @@ class FormatCodeCommand(sublime_plugin.TextCommand):
 
             dart_path = None
             for path in os.environ.get('PATH').split(';'):
-                if 'flutter' in Path(path).parts:
-                    dart_path = str(Path(path)) + str(Path('/cache/dart-sdk/bin/dart'))
+                path.split(os.path.sep)
+                # if 'flutter' in Path(path).parts:
+                if 'flutter' in path.split(os.path.sep):
+                    # dart_path = str(Path(path)) + str(Path('/cache/dart-sdk/bin/dart'))
+                    dart_path = '/cache/dart-sdk/bin/dart'
                     if platform.system() == 'Windows':
-                        dart_path += '.exe'
+                        dart_path = '\\cache\\dart-sdk\\bin\\dart.exe'
+                    dart_path = str(path) + dart_path
+                    # if platform.system() == 'Windows':
+                    #     dart_path += '.exe'
 
             if dart_path:
                 # --fix --indent --selection --summary --line-length
