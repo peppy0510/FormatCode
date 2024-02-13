@@ -14,7 +14,6 @@ reference:
 '''
 
 
-import html
 import json
 import os
 import platform
@@ -24,6 +23,7 @@ import subprocess
 
 from .JSXTagComment import JSXTagComment
 from .SingleLineComment import SingleLineComment
+# import html
 # from pathlib import Path
 
 
